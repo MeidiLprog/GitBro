@@ -32,16 +32,22 @@ def install_git():
     return False
 
 #checking the token
-def checktokenENV(token : str):
-    if not isinstance(token,str) or not re.match("github_pat_",token):
-        print("The token must be a string \n")
+def checktokenENV(token: str):
+    print("Checking GITHUB Token format\n")
+
+    if not token:
+        print("GIT_TOKEN not found in environment\n")
         return False
-    print("Checking GITHUB Token \n")
-    tokens = token
-    if not tokens:
-        print("GIT_TOKEN NOT FOUND in the current environnement \n")
-        print("Use: export GIT_TOKEN=github_pat_xxxxxx\n")
-    print("Token retrieved !\n")
+
+    if not isinstance(token, str):
+        print("Token is not a string\n")
+        return False
+
+    if not token.startswith("github_pat_"):
+        print("Token does not look like a GitHub PAT\n")
+        return False
+
+    print("Token format seems valid\n")
     return True
 
 
@@ -72,7 +78,7 @@ def test_github_token():
         return False
     
     print("GitHub token valid \n")
-    print(f"Logged as: {response.json().get("login"),"\n"} ")
+    print(f"Logged as: {response.json().get('login')}\n")
     return True
 
 '''
@@ -116,7 +122,7 @@ def create_git_repo(rep_name : str, private=False):
     except requests.RequestException:
         print("An error occured while reaching out github \n")
         return False
-    
+
     if response.status_code == 201:
         print("Repo successfully created ! \n")
         return True
@@ -127,8 +133,27 @@ def create_git_repo(rep_name : str, private=False):
         except ValueError:
             msg = response.text
         print(f"Github returned {msg}\n")
-        
+
     print("Failed to create the repo \n")
     print(f"Error {response.status_code}\n")
     print(response.text, end="\n")
     return False
+
+
+#### TOKEN CHECKED + REPO CREATED ####
+
+#### NOW THE GIT PIPELINE ####
+
+def initgetRepo():
+    print("Initiliazing repo \n")
+    if os.path.isdir(".git"):
+        print("Git repo already initialized \n")
+        return True
+    try:
+        #gotta initialize it 
+        subprocess.run([_PYTHON_,"git","init"],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+    except subprocess.CalledProcessError:
+        print("An error occured while initializinh the repo \n")
+        return False
+    print("Git repo initialized \n")
+    return True
