@@ -194,3 +194,59 @@ def createFiles(repo_name : str):
         return False
     print("Files created \n")
     return True
+
+def gitaddAll():
+    print("Adding files to git index\n")
+
+    try:
+        subprocess.run(
+            ["git", "add", "."],
+            check=True
+        )
+    except subprocess.CalledProcessError:
+        print("Failed to add files\n")
+        return False
+
+    print("Files added\n")
+    return True
+
+def initialCommit():
+    print("The first commit \n")
+    try:
+        subprocess.run[_PYTHON_,"git","commit","-m","Initial commit"]
+    except subprocess.CalledProcessError:
+        print("Initial commit failed (maybe already exists)\n")
+        return False
+
+    print("Initial commit created\n")
+    return True
+
+def setBranch():
+    print("This function is particular in regard of issues with git naming Master and not main\n")
+    try:
+        subprocess.run(["git","branch","-M","main"])
+        print("Branch named main \n")
+    except subprocess.CalledProcessError:
+        print("Failed to set main branch's name \n")
+        return False
+    print("Main branch set \n")
+    return True
+
+def gitsetRemote(repo_name : str, user=_GIT_USER ):
+    _REMOTE_URL = f"https://github.com/{_GIT_USER}/{repo_name}.git"
+
+    try:
+        subprocess.run([_PYTHON_,"git","remote","remove","origin"],
+                       stdout=subprocess.DEVNULL,
+                       stderr=subprocess.DEVNULL)
+    except subprocess.CalledProcessError:
+        pass
+    
+    try:
+        subprocess.run(["git","remote","add","origin",_REMOTE_URL],check=True)
+    except subprocess.CalledProcessError:
+        print("Failed to add git remote url \n")
+        return False
+    print(f"Remote set url {_REMOTE_URL}\n")
+    return True
+
