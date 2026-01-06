@@ -144,6 +144,10 @@ def create_git_repo(rep_name : str, private=False):
 
 #### NOW THE GIT PIPELINE ####
 
+_GIT_USER = "MeidiLprog"
+_GIT_EMAIL_ = "m.lef3105@gmail.com"
+
+
 def initgetRepo():
     print("Initiliazing repo \n")
     if os.path.isdir(".git"):
@@ -156,4 +160,37 @@ def initgetRepo():
         print("An error occured while initializinh the repo \n")
         return False
     print("Git repo initialized \n")
+    return True
+
+
+#Global config, basic things just the user and email
+def configStuff(name : str, email : str):
+    if (not isinstance(name,str)) or (not isinstance(email,str)):
+        raise TypeError("Your variables must be of type str\n")
+    
+    if (len(name) == 0) or (len(email) == 0):
+        raise ValueError("Variables cannot be empty \n")
+    
+    try:
+        subprocess.run(["git","--config","user.name",name],check=True)
+        subprocess.run(["git","--config","user.email",email])
+    except subprocess.CalledProcessError:
+        print("Git user couldn't be configured \n")
+        return False
+    print("Git user configured\n")
+    return True
+
+
+def createFiles(repo_name : str):
+    try:
+        if not os.path.isfile("README.md"):
+            with open("README.md","w",encoding="utf-8") as f:
+                f.write(f"{repo_name}\n\nInitial Commit\n")
+        if not os.path.isfile(".gitignore"):
+            with open(".gitignore","w") as f:
+                f.write("__pycache__/\n.env\n*.log\n")
+    except OSError:
+        print("Failed to create files \n")
+        return False
+    print("Files created \n")
     return True
