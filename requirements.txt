@@ -5,9 +5,9 @@ seaborn
 scikit-learn
 jupyter
 numpy
-pandas / polars
+pandas 
 scikit-learn
-xgboost / lightgbm
+xgboost 
 pytorch
 mlflow
 fastapi

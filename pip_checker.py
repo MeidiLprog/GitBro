@@ -63,14 +63,17 @@ def install_lib():
         print("requirements is nowhere to be found \n")
     
     CURRENT_FILE = os.path.join(CURRENT_PATH,"requirements.txt")
-    
+
     if os.path.getsize(CURRENT_FILE) == 0:
         print("requirements is an empty file !\n")
         return False
     
-
-
-
-
+    try: 
+        subprocess.run(["py","-m","pip","install","-r",CURRENT_FILE])
+    except subprocess.CalledProcessError:
+        print("Couldn't install libs\n")
+        return False
+    
+    return True
 
 

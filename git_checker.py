@@ -155,7 +155,7 @@ def initgetRepo():
         return True
     try:
         #gotta initialize it 
-        subprocess.run([_PYTHON_,"git","init"],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
+        subprocess.run(["git","init"],check=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)
     except subprocess.CalledProcessError:
         print("An error occured while initializinh the repo \n")
         return False
@@ -172,8 +172,8 @@ def configStuff(name : str, email : str):
         raise ValueError("Variables cannot be empty \n")
     
     try:
-        subprocess.run(["git","--config","user.name",name],check=True)
-        subprocess.run(["git","--config","user.email",email])
+        subprocess.run(["git", "config", "user.name", name],check=True)
+        subprocess.run(["git","config","user.email",email])
     except subprocess.CalledProcessError:
         print("Git user couldn't be configured \n")
         return False
@@ -213,7 +213,7 @@ def gitaddAll():
 def initialCommit():
     print("The first commit \n")
     try:
-        subprocess.run[_PYTHON_,"git","commit","-m","Initial commit"]
+        subprocess.run["git","commit","-m","Initial commit"]
     except subprocess.CalledProcessError:
         print("Initial commit failed (maybe already exists)\n")
         return False
@@ -250,3 +250,17 @@ def gitsetRemote(repo_name : str, user=_GIT_USER ):
     print(f"Remote set url {_REMOTE_URL}\n")
     return True
 
+def git_push():
+    print("Pushing to GitHub\n")
+
+    try:
+        subprocess.run(
+            ["git", "push", "-u", "origin", "main"],
+            check=True
+        )
+    except subprocess.CalledProcessError:
+        print("Failed to push to GitHub\n")
+        return False
+
+    print("Push successful\n")
+    return True
